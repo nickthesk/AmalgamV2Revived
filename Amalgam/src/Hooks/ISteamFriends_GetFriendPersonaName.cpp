@@ -12,6 +12,24 @@ MAKE_HOOK(ISteamFriends_GetFriendPersonaName, U::Memory.GetVirtual(I::SteamFrien
 
 	const auto dwRetAddr = uintptr_t(_ReturnAddress());
 	const auto dwDesired = S::GetPlayerNameForSteamID_GetFriendPersonaName_Call();
+//This trick theoretically allows you to use the name command (Only on community servers)
+if (steamIDFriend == I::SteamUser->GetSteamID())
+    {
+        static ConVar* nameVar = I::CVar->FindVar("name");
+        CTFPlayer* pLocal = H::Entities.GetLocal();
+        bool bInGame = I::EngineClient->IsInGame() && pLocal; //to call the user's original name 
+		//and prevent it from only using the last one used.
+        // If we are not in a match, we return the real Steam name 
+        if (!bInGame)
+        {
+            return CALL_ORIGINAL(rcx, steamIDFriend);
+        }
+        // If in-game, return the string from the "name" console variable
+        if (nameVar)
+        {
+            return nameVar->GetString();
+        }
+    }
 
 	if (dwRetAddr == dwDesired && Vars::Visuals::UI::StreamerMode.Value)
 	{
