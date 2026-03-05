@@ -101,6 +101,7 @@ public:
 	void UnlockAchievements();
 	void UnlockItemAchievements();
 	void LockAchievements();
+    void GetAchievement(int value);
 	void LockItemAchievements();
 	void SetAutoBalanceTeamChangePending(bool bPending) { m_bAutoBalanceTeamChangePending = bPending; }
 	void AutoMvmReadyUp();
