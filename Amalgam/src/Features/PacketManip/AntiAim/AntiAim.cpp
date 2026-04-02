@@ -158,15 +158,15 @@ float CAntiAim::GetYawOffset(CTFPlayer* pEntity, bool bFake)
 		return bSideways ? 90.f : -90.f;
 	}
 	case Vars::AntiAim::YawEnum::Omega:
-	{
-		static float flRandomYaw = 0.f;
-		if (bFake)
-		{
-			flRandomYaw = Math::NormalizeAngle(flRandomYaw + SDK::RandomFloat(-30.f, 30.f));
-			return flRandomYaw;
-		}
-		return Math::NormalizeAngle(flRandomYaw - 180.f + SDK::RandomFloat(-40.f, 40.f));
-	}
+{
+    static float flRandomYaw = 0.f;
+    if (bFake && I::ClientState->chokedcommands)
+    {
+        flRandomYaw = flRandomYaw + SDK::RandomFloat(-30.f, 30.f);
+        return flRandomYaw;
+    }
+    return flRandomYaw - 180.f + SDK::RandomFloat(-40.f, 40.f);
+}
 	case Vars::AntiAim::YawEnum::RandomUnclamped: return SDK::RandomFloat(-65536.f, 65536.f);
 	case Vars::AntiAim::YawEnum::Heck: return SDK::RandomFloat(-359999.97f, 359999.97f);
 	case Vars::AntiAim::YawEnum::Tornado:
